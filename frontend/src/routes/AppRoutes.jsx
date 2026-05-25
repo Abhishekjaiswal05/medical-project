@@ -1,3 +1,4 @@
+import ForgotPassword from "../pages/ForgotPassword"
 import { Routes, Route } from "react-router-dom"
 import Home from "../pages/Home"
 import Login from "../pages/Login"
@@ -61,6 +62,12 @@ export default function AppRoutes() {
                     </ProtectedRoute>
                 }
             />
+
+            <Route
+                path="/forgot-password"
+                element={<ForgotPassword />}
+            />
+
             {/* ALL LOGGED IN USERS */}
 
             <Route

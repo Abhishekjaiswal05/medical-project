@@ -1,3 +1,4 @@
+import { motion } from "framer-motion"
 import { registerUser } from "../services/authService"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -38,39 +39,102 @@ export default function Register() {
 
     return (
 
-        <div className="min-h-screen bg-slate-950 flex justify-center items-center">
+        <div className="min-h-screen bg-slate-950 flex justify-center items-center overflow-hidden relative">
 
-            <form
+            <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-cyan-500 opacity-20 blur-[120px] rounded-full"></div>
+
+            <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-500 opacity-20 blur-[120px] rounded-full"></div>
+
+            <motion.form
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.8 }}
                 onSubmit={handleRegister}
-                className="bg-slate-900 p-10 rounded-3xl w-[400px] flex flex-col gap-6 shadow-2xl"
+                className="
+  relative
+  z-10
+  backdrop-blur-xl
+  bg-white/10
+  border border-white/20
+  p-10
+  rounded-3xl
+  w-[420px]
+  flex flex-col
+  gap-5
+  shadow-[0_0_40px_rgba(0,255,255,0.2)]
+  "
             >
 
-                <h1 className="text-white text-4xl font-bold text-center">
-                    Register
+                
+
+                <h1 className="text-white text-5xl font-extrabold text-center tracking-wide">
+                    Create Account
                 </h1>
 
+                <p className="text-cyan-300 text-center">
+                    Join MediMind AI Healthcare
+                </p>
                 <input
                     type="text"
-                    placeholder="Full Name"
+                    placeholder="Enter your name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="p-4 rounded-xl bg-slate-800 text-white outline-none"
+                    className="
+p-4
+rounded-xl
+bg-white/10
+border border-white/20
+text-white
+placeholder:text-gray-300
+outline-none
+focus:border-cyan-400
+focus:ring-2
+focus:ring-cyan-400
+transition-all
+duration-300
+"
                 />
 
                 <input
                     type="email"
-                    placeholder="Email"
+                    placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="p-4 rounded-xl bg-slate-800 text-white outline-none"
+                    className="
+p-4
+rounded-xl
+bg-white/10
+border border-white/20
+text-white
+placeholder:text-gray-300
+outline-none
+focus:border-cyan-400
+focus:ring-2
+focus:ring-cyan-400
+transition-all
+duration-300
+"
                 />
 
                 <input
                     type="password"
-                    placeholder="Password"
+                   placeholder="Create password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="p-4 rounded-xl bg-slate-800 text-white outline-none"
+                    className="
+p-4
+rounded-xl
+bg-white/10
+border border-white/20
+text-white
+placeholder:text-gray-300
+outline-none
+focus:border-cyan-400
+focus:ring-2
+focus:ring-cyan-400
+transition-all
+duration-300
+"
                 />
 
                 <select
@@ -85,12 +149,43 @@ export default function Register() {
 
                 <button
                     type="submit"
-                    className="bg-green-600 hover:bg-green-700 transition p-4 rounded-xl text-white font-semibold"
+                    className="
+bg-gradient-to-r
+from-cyan-500
+to-blue-600
+hover:scale-105
+transition-all
+duration-300
+p-4
+rounded-xl
+text-white
+font-bold
+shadow-lg
+shadow-cyan-500/40
+"
                 >
                     Register
                 </button>
 
-            </form>
+                <p className="text-gray-400 text-center">
+  Already have an account?
+
+  <span
+    onClick={() => navigate("/login")}
+    className="
+    text-cyan-400
+    cursor-pointer
+    ml-2
+    hover:text-cyan-300
+    transition
+    font-semibold
+    "
+  >
+    Login
+  </span>
+</p>
+
+            </motion.form>
 
         </div>
     )
