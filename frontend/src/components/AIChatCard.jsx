@@ -1,11 +1,16 @@
 import axios from "axios"
 import { motion } from "framer-motion"
 import { useState, useEffect, useRef } from "react"
+
 export default function AIChatCard() {
 
     const messagesContainerRef = useRef(null)
+
     const [message, setMessage] = useState("")
     const [isTyping, setIsTyping] = useState(false)
+
+    // DARK MODE STATE
+    const [darkMode, setDarkMode] = useState(true)
 
     const [messages, setMessages] = useState([
         {
@@ -66,7 +71,6 @@ export default function AIChatCard() {
         setIsTyping(false)
     }
 
-
     useEffect(() => {
 
         const container = messagesContainerRef.current
@@ -79,7 +83,9 @@ export default function AIChatCard() {
             })
 
         }
+
     }, [messages, isTyping])
+
     return (
 
         <motion.div
@@ -100,17 +106,57 @@ export default function AIChatCard() {
                 duration: 0.6
             }}
 
-            className="
-            bg-[#27345F]/80
-            backdrop-blur-xl
-            rounded-3xl
-            p-8
-            shadow-[0_0_40px_rgba(34,211,238,0.15)]
-            mt-10
-            border
-            border-cyan-400/20
-        "
+            className={`
+                backdrop-blur-xl
+                rounded-3xl
+                p-8
+                mt-10
+                border
+                transition-all
+                duration-500
+                ${
+                    darkMode
+                        ? `
+                            bg-[#27345F]/80
+                            border-cyan-400/20
+                            shadow-[0_0_40px_rgba(34,211,238,0.15)]
+                        `
+                        : `
+                            bg-white/90
+                            border-gray-300
+                            shadow-[0_0_30px_rgba(0,0,0,0.1)]
+                        `
+                }
+            `}
         >
+
+            {/* TOP BAR */}
+            <div className="flex justify-end mb-5">
+
+                <button
+
+                    onClick={() => setDarkMode(!darkMode)}
+
+                    className={`
+                        px-5
+                        py-2
+                        rounded-xl
+                        font-semibold
+                        transition-all
+                        duration-300
+                        ${
+                            darkMode
+                                ? "bg-white text-black"
+                                : "bg-black text-white"
+                        }
+                    `}
+                >
+
+                    {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+
+                </button>
+
+            </div>
 
             {/* Header */}
             <div className="flex items-center gap-5 relative">
@@ -129,41 +175,41 @@ export default function AIChatCard() {
                     }}
 
                     className="
-            relative
-            w-20
-            h-20
-            rounded-full
-            bg-gradient-to-r
-            from-cyan-400
-            via-blue-500
-            to-purple-500
-            shadow-[0_0_60px_rgba(34,211,238,0.8)]
-            flex
-            items-center
-            justify-center
-        "
+                        relative
+                        w-20
+                        h-20
+                        rounded-full
+                        bg-gradient-to-r
+                        from-cyan-400
+                        via-blue-500
+                        to-purple-500
+                        shadow-[0_0_60px_rgba(34,211,238,0.8)]
+                        flex
+                        items-center
+                        justify-center
+                    "
                 >
 
                     {/* INNER GLOW */}
                     <div
                         className="
-                absolute
-                w-10
-                h-10
-                rounded-full
-                bg-white/40
-                blur-xl
-            "
+                            absolute
+                            w-10
+                            h-10
+                            rounded-full
+                            bg-white/40
+                            blur-xl
+                        "
                     ></div>
 
                     {/* CENTER DOT */}
                     <div
                         className="
-                w-5
-                h-5
-                rounded-full
-                bg-white
-            "
+                            w-5
+                            h-5
+                            rounded-full
+                            bg-white
+                        "
                     ></div>
 
                 </motion.div>
@@ -171,11 +217,30 @@ export default function AIChatCard() {
                 {/* TEXT */}
                 <div>
 
-                    <h2 className="text-4xl font-bold text-white">
+                    <h2
+                        className={`
+                            text-4xl
+                            font-bold
+                            ${
+                                darkMode
+                                    ? "text-white"
+                                    : "text-black"
+                            }
+                        `}
+                    >
                         MediMind AI Assistant
                     </h2>
 
-                    <p className="text-cyan-300 mt-1">
+                    <p
+                        className={`
+                            mt-1
+                            ${
+                                darkMode
+                                    ? "text-cyan-300"
+                                    : "text-blue-700"
+                            }
+                        `}
+                    >
                         Online • Smart Healthcare Support
                     </p>
 
@@ -187,22 +252,24 @@ export default function AIChatCard() {
             <div
 
                 ref={messagesContainerRef}
+
                 className="
-    mt-8
-    flex
-    flex-col
-    gap-4
-    max-h-[400px]
-    overflow-y-auto
-    pr-2
-     scroll-smooth
-"
+                    mt-8
+                    flex
+                    flex-col
+                    gap-4
+                    max-h-[400px]
+                    overflow-y-auto
+                    pr-2
+                    scroll-smooth
+                "
             >
 
                 {
                     messages.map((msg) => (
 
                         <motion.div
+
                             key={msg.id}
 
                             initial={{
@@ -220,17 +287,21 @@ export default function AIChatCard() {
                             }}
 
                             className={`
-        max-w-[80%]
-        px-6
-        py-4
-        rounded-2xl
-        text-white
-        text-lg
-        ${msg.sender === "ai"
-                                    ? "bg-[#1F5F8B]"
-                                    : "bg-blue-600 self-end"
+                                max-w-[80%]
+                                px-6
+                                py-4
+                                rounded-2xl
+                                backdrop-blur-lg
+border border-white/10
+                                text-lg
+                                ${
+                                    msg.sender === "ai"
+                                        ? darkMode
+                                            ? "bg-[#1F5F8B] text-white"
+                                            : "bg-blue-100 text-black"
+                                        : "bg-blue-600 text-white self-end"
                                 }
-    `}
+                            `}
                         >
 
                             {msg.text}
@@ -239,8 +310,6 @@ export default function AIChatCard() {
 
                     ))
                 }
-
-
 
                 {
                     isTyping && (
@@ -255,42 +324,29 @@ export default function AIChatCard() {
                                 opacity: 1
                             }}
 
-                            className="
-                bg-[#1F5F8B]
-                w-fit
-                px-5
-                py-3
-                rounded-2xl
-                text-white
-                flex
-                items-center
-                gap-2
-            "
+                            className={`
+                                w-fit
+                                px-5
+                                py-3
+                                rounded-2xl
+                                backdrop-blur-lg
+border border-white/10
+                                flex
+                                items-center
+                                gap-2
+                                ${
+                                    darkMode
+                                        ? "bg-[#1F5F8B]"
+                                        : "bg-blue-100"
+                                }
+                            `}
                         >
 
                             <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
 
-                            <div
-                                className="
-                    w-2
-                    h-2
-                    bg-white
-                    rounded-full
-                    animate-bounce
-                    delay-100
-                "
-                            ></div>
+                            <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-100"></div>
 
-                            <div
-                                className="
-                    w-2
-                    h-2
-                    bg-white
-                    rounded-full
-                    animate-bounce
-                    delay-200
-                "
-                            ></div>
+                            <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-200"></div>
 
                         </motion.div>
                     )
@@ -298,15 +354,17 @@ export default function AIChatCard() {
 
             </div>
 
-
-
             {/* Input */}
             <div className="flex gap-4 mt-8">
 
                 <input
+
                     type="text"
+
                     placeholder="Write a message..."
+
                     value={message}
+
                     onChange={(e) => setMessage(e.target.value)}
 
                     onKeyDown={(e) => {
@@ -314,48 +372,70 @@ export default function AIChatCard() {
                             handleSendMessage()
                         }
                     }}
-                    className="
-            flex-1
-            px-6
-            py-4
-            rounded-2xl
-            bg-[#1B2448]
-            text-white
-            outline-none
-            border border-cyan-400/20
-focus:border-cyan-400
-focus:shadow-[0_0_20px_rgba(34,211,238,0.5)]
-transition-all
-duration-300
-          "
+
+                    className={`
+                        flex-1
+                        px-6
+                        py-4
+                        rounded-2xl
+                        backdrop-blur-lg
+border border-white/10
+                        outline-none
+                        border
+                        transition-all
+                        duration-300
+                        ${
+                            darkMode
+                                ? `
+                                    bg-[#1B2448]
+                                    text-white
+                                    border-cyan-400/20
+                                    focus:border-cyan-400
+                                    focus:shadow-[0_0_20px_rgba(34,211,238,0.5)]
+                                `
+                                : `
+                                    bg-white
+                                    text-black
+                                    border-gray-300
+                                    focus:border-blue-500
+                                `
+                        }
+                    `}
                 />
 
                 <motion.button
+
                     whileHover={{
                         scale: 1.08,
                         boxShadow: "0px 0px 20px rgba(34,211,238,0.8)"
                     }}
+
                     whileTap={{
                         scale: 0.95
                     }}
+
                     onClick={handleSendMessage}
+
                     className="
-            bg-gradient-to-r
-from-cyan-400
-to-blue-600
-hover:from-cyan-300
-hover:to-blue-500
-shadow-[0_0_20px_rgba(34,211,238,0.4)]
-            transition
-            text-white
-            px-8
-            rounded-2xl
-            text-lg
-            font-semibold
-          "
+                        bg-gradient-to-r
+                        from-cyan-400
+                        to-blue-600
+                        hover:from-cyan-300
+                        hover:to-blue-500
+                        shadow-[0_0_20px_rgba(34,211,238,0.4)]
+                        transition
+                        text-white
+                        px-8
+                        rounded-2xl
+                        backdrop-blur-lg
+border border-white/10
+                        text-lg
+                        font-semibold
+                    "
                 >
                     Send
                 </motion.button>
+
             </div>
 
         </motion.div>
