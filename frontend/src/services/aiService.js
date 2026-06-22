@@ -17,3 +17,23 @@ export const sendMessageToAI = async (message) => {
     throw error
   }
 }
+export const extractMedicinesFromImage = async (imageBase64) => {
+
+  try {
+
+    const response = await api.post(
+      "/ai/extract-medicines",
+      {
+        imageBase64
+      }
+    )
+
+    return response.data
+
+  } catch (error) {
+
+    console.error(error)
+
+    throw error
+  }
+}

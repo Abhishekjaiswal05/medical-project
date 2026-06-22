@@ -1,10 +1,5 @@
-import { Routes, Route } from "react-router-dom"
-
-import EmergencyAlerts from "../pages/EmergencyAlerts";
-import PrescriptionUpload from "../pages/PrescriptionUpload";
 import ForgotPassword from "../pages/ForgotPassword"
-import MedicineTracker from "../pages/MedicineTracker";
-import AIAssistant from "../pages/AIAssistant";
+import { Routes, Route } from "react-router-dom"
 import Home from "../pages/Home"
 import Login from "../pages/Login"
 import Register from "../pages/Register"
@@ -88,56 +83,6 @@ export default function AppRoutes() {
                         <Dashboard />
                     </ProtectedRoute>
                 }
-            />
-
-            <Route
-                path="/prescription-upload"
-                element={
-                    <ProtectedRoute
-                        allowedRoles={[
-                            "ADMIN",
-                            "PATIENT",
-                            "CAREGIVER"
-                        ]}
-                    >
-                        <PrescriptionUpload />
-                    </ProtectedRoute>
-                }
-            />
-
-            <Route
-                path="/medicine-tracker"
-                element={
-                    <ProtectedRoute
-                        allowedRoles={[
-                            "ADMIN",
-                            "PATIENT",
-                            "CAREGIVER"
-                        ]}
-                    >
-                        <MedicineTracker />
-                    </ProtectedRoute>
-                }
-            />
-
-            <Route
-                path="/ai-assistant"
-                element={
-                    <ProtectedRoute
-                        allowedRoles={[
-                            "ADMIN",
-                            "PATIENT",
-                            "CAREGIVER"
-                        ]}
-                    >
-                        <AIAssistant />
-                    </ProtectedRoute>
-                }
-            />
-
-            <Route
-                path="/emergency-alerts"
-                element={<EmergencyAlerts />}
             />
 
         </Routes>

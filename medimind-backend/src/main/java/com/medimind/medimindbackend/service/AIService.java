@@ -1,18 +1,22 @@
 package com.medimind.medimindbackend.service;
 
-import com.medimind.medimindbackend.dto.ChatRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.*;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AIService {
 
-    @Value("${openrouter.api.key}")
-    private String apiKey;
+    private final MedicineInfoService medicineInfoService;
+
+    public AIService(MedicineInfoService medicineInfoService) {
+        this.medicineInfoService = medicineInfoService;
+    }
+
+    @Value("${groq.api.key}")
+    private String groqApiKey;
 
     public String getAIResponse(String userMessage) {
 
@@ -20,42 +24,48 @@ public class AIService {
 
             RestTemplate restTemplate = new RestTemplate();
 
-            String url = "https://openrouter.ai/api/v1/chat/completions";
+            String url =
+                    "https://api.groq.com/openai/v1/chat/completions";
 
             HttpHeaders headers = new HttpHeaders();
 
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            headers.setBearerAuth(apiKey);
+            headers.setBearerAuth(groqApiKey);
 
             Map<String, Object> body = new HashMap<>();
 
-            body.put("model", "openai/gpt-3.5-turbo");
+            body.put(
+                    "model",
+                    "llama-3.3-70b-versatile"
+            );
 
-            List<Map<String, String>> messages = new ArrayList<>();
+            List<Map<String, String>> messages =
+                    new ArrayList<>();
 
-            Map<String, String> userMsg = new HashMap<>();
-
-            userMsg.put("role", "user");
-
-            userMsg.put("content", userMessage);
-
-            messages.add(userMsg);
+            messages.add(
+                    Map.of(
+                            "role", "user",
+                            "content", userMessage
+                    )
+            );
 
             body.put("messages", messages);
 
             HttpEntity<Map<String, Object>> request =
                     new HttpEntity<>(body, headers);
 
-            ResponseEntity<Map> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.POST,
-                    request,
-                    Map.class
-            );
+            ResponseEntity<Map> response =
+                    restTemplate.exchange(
+                            url,
+                            HttpMethod.POST,
+                            request,
+                            Map.class
+                    );
 
             List choices =
-                    (List) response.getBody().get("choices");
+                    (List) response.getBody()
+                            .get("choices");
 
             Map choice =
                     (Map) choices.get(0);
@@ -69,7 +79,22 @@ public class AIService {
 
             e.printStackTrace();
 
-            return "AI service unavailable.";
+            return "AI Service Error";
         }
+    }
+    public String extractMedicinesFromText(String text) {
+
+        String prompt =
+                """
+                Extract only medicine names
+                from this prescription.
+    
+                Return only medicine names.
+    
+                Prescription:
+                """
+                        + text;
+
+        return getAIResponse(prompt);
     }
 }
